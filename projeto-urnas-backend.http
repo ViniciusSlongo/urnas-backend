@@ -1,0 +1,6 @@
+@projeto_urnas_backend_HostAddress = http://localhost:5058
+
+GET {{projeto_urnas_backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
