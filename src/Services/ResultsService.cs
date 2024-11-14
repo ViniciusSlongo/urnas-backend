@@ -1,10 +1,8 @@
 using System;
 
-namespace Services.ResultsService{
+namespace Services {
     public class ResultsService
     {
-
-        
 
         public ResultsService() {
 

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Services.ResultsService;
+using Services;
 
 [ApiController]
 public class ResultsController : ControllerBase
