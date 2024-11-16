@@ -10,8 +10,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<EleicaoContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))); 
+
 //services
-builder.Services.AddSingleton<ResultsService>(); 
+builder.Services.AddScoped<ResultadosEleicaoService>(); 
 builder.Services.AddScoped<EleicaoService>(); 
 
 var app = builder.Build();
@@ -27,3 +28,4 @@ app.UseHttpsRedirection();
 app.MapControllers(); 
 
 app.Run();
+ 

@@ -1,81 +1,81 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Models.Configuracao
 {
     public class Eleicao
     {
-        public int Id { get; set; }
-        public string NomeEleicao { get; set; }
-        public List<Candidato> Candidatos { get; set; }
-        public List<ZonaEleitoral> ZonasEleitorais { get; set; }
+        public Guid id { get; set; }
+        public string nomeEleicao { get; set; }
+        public List<Candidato> candidatos { get; set; }
+        public List<ZonaEleitoral> zonasEleitorais { get; set; }
 
-        // Construtor sem parâmetros para o Entity Framework
         public Eleicao()
         {
-            Candidatos = new List<Candidato>();
-            ZonasEleitorais = new List<ZonaEleitoral>();
+            id = Guid.NewGuid(); 
+            candidatos = new List<Candidato>();
+            zonasEleitorais = new List<ZonaEleitoral>();
         }
 
-        // Construtor com parâmetros, caso você queira usá-lo em outras partes da aplicação
-        public Eleicao(int id, string nomeEleicao, List<Candidato> candidatos, List<ZonaEleitoral> zonasEleitorais)
+        public Eleicao(string nomeEleicao, List<Candidato> candidatos, List<ZonaEleitoral> zonasEleitorais)
         {
-            Id = id;
-            NomeEleicao = nomeEleicao ?? throw new ArgumentNullException(nameof(nomeEleicao));
-            Candidatos = candidatos ?? throw new ArgumentNullException(nameof(candidatos));
-            ZonasEleitorais = zonasEleitorais ?? throw new ArgumentNullException(nameof(zonasEleitorais));
+            this.nomeEleicao = nomeEleicao ?? throw new ArgumentNullException(nameof(nomeEleicao));
+            this.candidatos = candidatos ?? throw new ArgumentNullException(nameof(candidatos));
+            this.zonasEleitorais = zonasEleitorais ?? throw new ArgumentNullException(nameof(zonasEleitorais));
         }
     }
 
     public class Candidato
     {
-        public string Id { get; set; }
-        public string Nome { get; set; }
+        public Guid id { get; set; }
+        public string nome { get; set; }
 
-        // Construtor sem parâmetros para o Entity Framework
         public Candidato()
         {
+            id = Guid.NewGuid(); 
         }
 
-        // Construtor com parâmetros, caso você queira usá-lo em outras partes da aplicação
-        public Candidato(string id, string nome)
+        public Candidato(string nome)
         {
-            Id = id ?? throw new ArgumentNullException(nameof(id));
-            Nome = nome ?? throw new ArgumentNullException(nameof(nome));
+            this.nome = nome ?? throw new ArgumentNullException(nameof(nome));
         }
     }
 
     public class ZonaEleitoral
     {
-        public string Id { get; set; }
-        public List<Secao> Secoes { get; set; }
+        public string id { get; set; }
+        public List<Secao> secoes { get; set; }
 
-        // Construtor sem parâmetros para o Entity Framework
         public ZonaEleitoral()
         {
-            Secoes = new List<Secao>();
+            secoes = new List<Secao>();
         }
 
-        // Construtor com parâmetros, caso você queira usá-lo em outras partes da aplicação
         public ZonaEleitoral(string id, List<Secao> secoes)
         {
-            Id = id ?? throw new ArgumentNullException(nameof(id));
-            Secoes = secoes ?? throw new ArgumentNullException(nameof(secoes));
+            this.id = id ?? throw new ArgumentNullException(nameof(id));
+            this.secoes = secoes ?? throw new ArgumentNullException(nameof(secoes));
+
+            foreach (var secao in secoes)
+            {
+                secao.ZonaEleitoralId = id;  
+            }
         }
     }
 
     public class Secao
     {
-        public string Id { get; set; }
-        public int QuantidadeEleitores { get; set; }
+        public string id { get; set; }
+        
+        public string? ZonaEleitoralId { get; set; }  
 
-        // Construtor sem parâmetros para o Entity Framework
-        public Secao()
-        {
-        }
+        public int quantidadeEleitores { get; set; }
 
-        // Construtor com parâmetros, caso você queira usá-lo em outras partes da aplicação
+        public Secao() { }
+
         public Secao(string id, int quantidadeEleitores)
         {
-            Id = id ?? throw new ArgumentNullException(nameof(id));
-            QuantidadeEleitores = quantidadeEleitores;
+            this.id = id ?? throw new ArgumentNullException(nameof(id));
+            this.quantidadeEleitores = quantidadeEleitores;
         }
     }
 }

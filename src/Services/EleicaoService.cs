@@ -24,30 +24,30 @@ namespace Services
                 throw new ArgumentException("O JSON de configuração está vazio.");
             }
 
-            if (string.IsNullOrWhiteSpace(eleicao.NomeEleicao))
+            if (string.IsNullOrWhiteSpace(eleicao.nomeEleicao))
             {
                 throw new ArgumentException("Nome da eleição é obrigatório.");
             }
 
-            if (eleicao.Candidatos == null || !eleicao.Candidatos.Any())
+            if (eleicao.candidatos == null || !eleicao.candidatos.Any())
             {
                 throw new ArgumentException("É necessário informar pelo menos um candidato.");
             }
             
-            foreach (var zona in eleicao.ZonasEleitorais)
+            foreach (var zona in eleicao.zonasEleitorais)
             {
-                if (string.IsNullOrWhiteSpace(zona.Id))
+                if (string.IsNullOrWhiteSpace(zona.id))
                 {
                     throw new ArgumentException("ID da zona eleitoral é obrigatório.");
                 }
                 
-                foreach (var secao in zona.Secoes)
+                foreach (var secao in zona.secoes)
                 {
-                    if (string.IsNullOrWhiteSpace(secao.Id))
+                    if (string.IsNullOrWhiteSpace(secao.id))
                     {
                         throw new ArgumentException("ID da seção é obrigatório.");
                     }
-                    if (secao.QuantidadeEleitores <= 0)
+                    if (secao.quantidadeEleitores <= 0)
                     {
                         throw new ArgumentException("A quantidade de eleitores na seção deve ser maior que zero.");
                     }
