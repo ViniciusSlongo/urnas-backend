@@ -11,11 +11,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<EleicaoContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+        policy.AllowAnyOrigin()  
+              .AllowAnyMethod()  
+              .AllowAnyHeader()); 
+});
+
 //services
 builder.Services.AddScoped<ResultadosEleicaoService>(); 
 builder.Services.AddScoped<EleicaoService>(); 
 
 var app = builder.Build();
+
+app.UseCors("AllowAllOrigins");
 
 if (app.Environment.IsDevelopment())
 {
@@ -26,6 +36,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers(); 
-
 app.Run();
- 
