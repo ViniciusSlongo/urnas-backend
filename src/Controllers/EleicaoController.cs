@@ -76,5 +76,19 @@ namespace Controllers
                 return BadRequest(new { error = e.Message });
             }
         }
+
+        [ProducesResponseType(typeof(Eleicao), 200)]
+        [HttpGet("")]
+        public IActionResult ConsultarEleicao()
+        {
+            try {
+                List<Eleicao> eleicaViewModel = _eleicaoService.ObterEleicao();
+                return Ok(eleicaViewModel);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+        }
     }
 }
