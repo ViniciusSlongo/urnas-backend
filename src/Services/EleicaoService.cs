@@ -61,7 +61,11 @@ namespace Services
 
         public List<Eleicao> ObterEleicao() 
         {
-            return _context.Eleicoes.Include(e => e.zonasEleitorais).ThenInclude(z => z.secoes).ToList();
+            return _context.Eleicoes
+                .Include(e => e.candidatos) 
+                .Include(e => e.zonasEleitorais) 
+                    .ThenInclude(z => z.secoes) 
+                .ToList();
         }
     }
 }
