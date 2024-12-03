@@ -26,4 +26,18 @@ namespace ViewModel.Resultados
         public int TotalAbstencoes { get; set; }
         public float PercentualAbstencoes { get; set; }
     }
+
+    public class AtualizarSecaoInputModel
+    {
+        public string IdSecao { get; set; }
+        public int QuantidadePresentes { get; set; }
+        public int VotosValidos { get; set; }
+        public List<CandidatoInputModel> Candidatos { get; set; }
+    }
+
+    public class CandidatoInputModel
+    {
+        public string NomeCandidato { get; set; }
+        public int QuantidadeVotos { get; set; }
+    }
 }

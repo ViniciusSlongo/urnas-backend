@@ -46,6 +46,7 @@ namespace Controllers
                 return BadRequest(new { error = e.Message });
             }
         }
+        
         [HttpPost()]
         public IActionResult ConfigurarEleicao([FromBody] Eleicao eleicao)
         {
@@ -88,6 +89,30 @@ namespace Controllers
             catch (Exception e)
             {
                 return BadRequest(new { error = e.Message });
+            }
+        }
+
+        [HttpPut("atualizar-secao")]
+        public IActionResult AtualizarSecao([FromBody] AtualizarSecaoInputModel input)
+        {
+            try
+            {
+                _resultadosEleicaoService.AtualizarResultadosSecao(
+                    input.IdSecao,
+                    input.QuantidadePresentes,
+                    input.VotosValidos,
+                    input.Candidatos.Select(c => new CandidatoResultado
+                    {
+                        nomeCandidato = c.NomeCandidato,
+                        quantidadeVotos = c.QuantidadeVotos
+                    }).ToList()
+                );
+
+                return Ok(new { mensagem = "Resultados da seção atualizados com sucesso." });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { erro = e.Message });
             }
         }
     }

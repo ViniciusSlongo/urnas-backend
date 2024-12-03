@@ -3,6 +3,8 @@ using Models.Resultados;
 using Data;
 using Microsoft.Identity.Client;
 using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
+using ViewModel.Resultados;
 
 namespace Services
 {
@@ -20,6 +22,7 @@ namespace Services
             _context.ResultadosEleicao.Add(resultados);
             _context.SaveChanges();
         }
+
 
         public void ConfigurarResultadosEleicao(ResultadosEleicao resultados)
         {
@@ -181,5 +184,55 @@ namespace Services
             };
         }
 
+        public void AtualizarResultadosSecao(string idSecao, int quantidadePresentes, int votosValidos, List<CandidatoResultado> candidatos)
+        {
+            if (string.IsNullOrWhiteSpace(idSecao))
+                throw new ArgumentException("ID da seção é obrigatório.");
+
+            if (quantidadePresentes < 0)
+                throw new ArgumentException("A quantidade de presentes não pode ser negativa.");
+
+            if (votosValidos < 0 || votosValidos > quantidadePresentes)
+                throw new ArgumentException("Os votos válidos devem ser não negativos e não exceder a quantidade de presentes.");
+
+            if (candidatos == null || !candidatos.Any())
+                throw new ArgumentException("É necessário informar pelo menos um candidato com seus resultados.");
+
+            // Busca a seção correspondente
+            var resultadoExistente = _context.ResultadosEleicao
+                .Include(r => r.candidatos)
+                .FirstOrDefault(r => r.idSecao == idSecao);
+
+            if (resultadoExistente == null)
+                throw new ArgumentException("Seção não encontrada!");
+
+            // Atualiza os dados da seção
+            resultadoExistente.quantidadePresentes = quantidadePresentes;
+            resultadoExistente.votosValidos = votosValidos;
+
+            // Atualiza ou adiciona os candidatos
+            foreach (var candidatoAtualizado in candidatos)
+            {
+                var candidatoExistente = resultadoExistente.candidatos
+                    .FirstOrDefault(c => c.nomeCandidato == candidatoAtualizado.nomeCandidato);
+
+                if (candidatoExistente != null)
+                {
+                    // Atualiza os votos do candidato existente
+                    candidatoExistente.quantidadeVotos = candidatoAtualizado.quantidadeVotos;
+                }
+                else
+                {
+                    // Adiciona um novo candidato
+                    resultadoExistente.candidatos.Add(new CandidatoResultado
+                    {
+                        nomeCandidato = candidatoAtualizado.nomeCandidato,
+                        quantidadeVotos = candidatoAtualizado.quantidadeVotos
+                    });
+                }
+            }
+
+            _context.SaveChanges();
+        }
     }
 }
